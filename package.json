@@ -54,6 +54,7 @@
         "express": "^5.1.0",
         "http-errors": "^2.0.0",
         "js-yaml": "^4.1.0",
+        "mongoose": "^8.16.1",
         "supertest": "^7.1.0",
         "winston": "^3.17.0"
     }
