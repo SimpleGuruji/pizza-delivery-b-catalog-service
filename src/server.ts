@@ -1,9 +1,9 @@
+import config from 'config'
 import app from './app'
-import { Config } from './config/index'
 import logger from './config/logger'
 
 const startServer = () => {
-    const port = Config.PORT
+    const port: number = config.get('server.port') || 5502
 
     try {
         app.listen(port, () => logger.info(`Server running  on port ${port}.`))

@@ -1,7 +1,7 @@
 {
-    "name": "auth-service",
+    "name": "catalog-service",
     "version": "1.0.0",
-    "description": "The user management service",
+    "description": "The Catalog management service",
     "homepage": "https://github.com/SimpleGuruji/pizza-delivery-b-auth-service#readme",
     "bugs": {
         "url": "https://github.com/SimpleGuruji/pizza-delivery-b-auth-service/issues"
@@ -31,6 +31,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.25.1",
+        "@types/config": "^3.3.5",
         "@types/express": "^5.0.1",
         "@types/http-errors": "^2.0.4",
         "@types/jest": "^29.5.14",
@@ -48,9 +49,11 @@
         "typescript-eslint": "^8.31.0"
     },
     "dependencies": {
+        "config": "^4.0.0",
         "dotenv": "^16.5.0",
         "express": "^5.1.0",
         "http-errors": "^2.0.0",
+        "js-yaml": "^4.1.0",
         "supertest": "^7.1.0",
         "winston": "^3.17.0"
     }
