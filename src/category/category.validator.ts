@@ -19,6 +19,7 @@ export default [
             if (!validKeys.includes(value)) {
                 throw new Error(`Invalid category price type: ${value}.`)
             }
+            return true
         }),
 
     body('attributes').exists().withMessage('Category attributes is required'),

@@ -1,17 +1,16 @@
-import { NextFunction, Request, Response, Router } from 'express'
+import { Router } from 'express'
 import { CategoryController } from './category.controller'
 import categoryValidator from './category.validator'
+import { CategoryService } from './category.service'
+import logger from '../config/logger'
+import { asyncWrapper } from '../common/utils/asyncWrapper'
 
 const router = Router()
 
-const categoryController = new CategoryController()
+const categoryService = new CategoryService()
 
-router.post(
-    '/',
-    categoryValidator,
-    (req: Request, res: Response, next: NextFunction) => {
-        categoryController.create(req, res, next)
-    },
-)
+const categoryController = new CategoryController(categoryService, logger)
+
+router.post('/', categoryValidator, asyncWrapper(categoryController.create))
 
 export default router
