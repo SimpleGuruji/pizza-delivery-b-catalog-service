@@ -4,7 +4,7 @@ import { Category, PriceConfiguration, Attribute } from './category.types'
 const priceConfigurationSchema = new Schema<PriceConfiguration>({
     priceType: {
         type: String,
-        enum: ['base', 'additonal'],
+        enum: ['base', 'aditional'],
     },
     availableOptions: {
         type: [String],

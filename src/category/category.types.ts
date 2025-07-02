@@ -1,6 +1,6 @@
 export interface PriceConfiguration {
     [key: string]: {
-        priceType: 'base' | 'additonal'
+        priceType: 'base' | 'aditonal'
         availableOptions: string[]
     }
 }
