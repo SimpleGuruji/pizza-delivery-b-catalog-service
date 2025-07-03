@@ -10,4 +10,23 @@ export class CategoryService {
         })
         return await category.save()
     }
+
+    async findall() {
+        return await CategoryModel.find()
+    }
+
+    async findById(id: string) {
+        return await CategoryModel.findOne({ _id: id })
+    }
+
+    async deleteById(id: string) {
+        return await CategoryModel.findByIdAndDelete(id)
+    }
+
+    async updateById(id: string, updateData: Partial<Category>) {
+        return await CategoryModel.findByIdAndUpdate(id, updateData, {
+            new: true,
+            runValidators: true,
+        })
+    }
 }
