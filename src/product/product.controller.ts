@@ -13,14 +13,15 @@ import {
 import { CloudinaryStorage } from '../common/services/cloudinary'
 import createHttpError from 'http-errors'
 import mongoose, { isValidObjectId } from 'mongoose'
-import logger from '../config/logger'
 import { AuthRequest } from '../common/types'
 import { UploadedFile } from 'express-fileupload'
+import { Logger } from 'winston'
 
 export class ProductController {
     constructor(
         private productService: ProductService,
         private storage: CloudinaryStorage,
+        private logger: Logger,
     ) {}
 
     create = async (
@@ -151,7 +152,10 @@ export class ProductController {
                 try {
                     await this.storage.delete(oldImage)
                 } catch (deleteError) {
-                    logger.error('Failed to delete old image:', deleteError)
+                    this.logger.error(
+                        'Failed to delete old image:',
+                        deleteError,
+                    )
                     // Don't return error here as the product update was successful
                 }
             }
@@ -169,7 +173,7 @@ export class ProductController {
                 try {
                     await this.storage.delete(newImage)
                 } catch (cleanupError) {
-                    logger.error(
+                    this.logger.error(
                         ' Failed to cleanup uploaded image:',
                         cleanupError,
                     )
@@ -202,7 +206,7 @@ export class ProductController {
 
             const search = typeof q === 'string' ? q.trim() : ''
 
-            logger.info(`Filters: ${JSON.stringify(filters)}`)
+            this.logger.info(`Filters: ${JSON.stringify(filters)}`)
 
             const products = await this.productService.getProducts(
                 search,
@@ -288,7 +292,7 @@ export class ProductController {
         try {
             await this.storage.delete(product.image)
         } catch (error) {
-            logger.error('Failed to delete image:', error)
+            this.logger.error('Failed to delete image:', error)
         }
 
         res.json({

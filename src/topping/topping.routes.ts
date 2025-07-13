@@ -1,24 +1,22 @@
 import { Router } from 'express'
-import fileUpload from 'express-fileupload'
-
-import authenticate from '../common/middlewares/authenticate'
-
-import { ProductController } from './product.controller'
-import createProductValidator from './create-product.validator'
 import { asyncWrapper } from '../common/utils/asyncWrapper'
-import { ProductService } from './product.service'
-import { CloudinaryStorage } from '../common/services/cloudinary'
-import { canAccessAdminOrManager } from '../common/middlewares/canAccessAdminOrManager'
-import updateProductValidator from './update-product.validator'
-import createHttpError from 'http-errors'
+import { ToppingService } from './topping.service'
+import { ToppingController } from './topping.controller'
 import logger from '../config/logger'
+import { CloudinaryStorage } from '../common/services/cloudinary'
+import authenticate from '../common/middlewares/authenticate'
+import { canAccessAdminOrManager } from '../common/middlewares/canAccessAdminOrManager'
+import fileUpload from 'express-fileupload'
+import createHttpError from 'http-errors'
+import createToppingValidator from './create-topping.validator'
+import updateToppingValidator from './update-topping.validator'
 
 const router = Router()
 
-const productService = new ProductService()
+const toppingService = new ToppingService()
 const cloudinaryStorage = new CloudinaryStorage()
-const productController = new ProductController(
-    productService,
+const toppingController = new ToppingController(
+    toppingService,
     cloudinaryStorage,
     logger,
 )
@@ -35,12 +33,16 @@ router.post(
             next(error)
         },
     }),
-    createProductValidator,
-    asyncWrapper(productController.create),
+    createToppingValidator,
+    asyncWrapper(toppingController.create),
 )
 
+router.get('/', asyncWrapper(toppingController.getAllToppings))
+
+router.get('/:toppingId', asyncWrapper(toppingController.getSingleTopping))
+
 router.put(
-    '/:productId',
+    '/:toppingId',
     authenticate,
     canAccessAdminOrManager,
     fileUpload({
@@ -51,23 +53,15 @@ router.put(
             next(error)
         },
     }),
-    updateProductValidator,
-    asyncWrapper(productController.update),
+    updateToppingValidator,
+    asyncWrapper(toppingController.update),
 )
-
-router.get(
-    '/',
-
-    asyncWrapper(productController.index),
-)
-
-router.get('/:productId', asyncWrapper(productController.getSingleProduct))
 
 router.delete(
-    '/:productId',
+    '/:toppingId',
     authenticate,
     canAccessAdminOrManager,
-    asyncWrapper(productController.deleteProduct),
+    asyncWrapper(toppingController.deleteTopping),
 )
 
 export default router
