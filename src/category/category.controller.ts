@@ -18,11 +18,13 @@ export class CategoryController {
         this.update = this.update.bind(this)
         this.delete = this.delete.bind(this)
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     async create(req: Request, res: Response, next: NextFunction) {
         const validationErrors = validationResult(req)
         if (!validationErrors.isEmpty()) {
-            return res.status(400).json({ errors: validationErrors.array() })
+            return next(
+                createHttpError(400, validationErrors.array()[0].msg as string),
+            )
         }
 
         const { name, priceConfiguration, attributes } = req.body as Category

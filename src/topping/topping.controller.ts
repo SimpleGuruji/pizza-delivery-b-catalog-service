@@ -30,7 +30,9 @@ export class ToppingController {
     ) => {
         const validationErrors = validationResult(req)
         if (!validationErrors.isEmpty()) {
-            return res.status(400).json({ errors: validationErrors.array() })
+            return next(
+                createHttpError(400, validationErrors.array()[0].msg as string),
+            )
         }
 
         const image = req.files?.image as UploadedFile
@@ -70,7 +72,9 @@ export class ToppingController {
     ) => {
         const validationErrors = validationResult(req)
         if (!validationErrors.isEmpty()) {
-            return res.status(400).json({ errors: validationErrors.array() })
+            return next(
+                createHttpError(400, validationErrors.array()[0].msg as string),
+            )
         }
 
         const { toppingId } = req.params

@@ -7,8 +7,7 @@ import toppingRouter from './topping/topping.routes'
 
 const app = express()
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static('public')) // Serve static files from the 'public' directory
+
 app.use(cookieParser())
 app.get('/', (req, res) => {
     res.status(200).send('Hello World!')
