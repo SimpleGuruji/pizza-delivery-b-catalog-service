@@ -18,7 +18,7 @@ export class CategoryController {
         this.update = this.update.bind(this)
         this.delete = this.delete.bind(this)
     }
-     
+
     async create(req: Request, res: Response, next: NextFunction) {
         const validationErrors = validationResult(req)
         if (!validationErrors.isEmpty()) {
