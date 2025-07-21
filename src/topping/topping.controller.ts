@@ -15,12 +15,14 @@ import createHttpError from 'http-errors'
 import { CloudinaryStorage } from '../common/services/cloudinary'
 import { isValidObjectId } from 'mongoose'
 import { AuthRequest } from '../common/types'
+import { MessageProducerBroker } from '../common/types/broker'
 
 export class ToppingController {
     constructor(
         private toppingService: ToppingService,
         private cloudinaryStorage: CloudinaryStorage,
         private logger: Logger,
+        private broker: MessageProducerBroker,
     ) {}
 
     create = async (
@@ -59,6 +61,14 @@ export class ToppingController {
         }
 
         const newTopping = await this.toppingService.create(topping as Topping)
+
+        await this.broker.sendMessage(
+            'topping',
+            JSON.stringify({
+                id: newTopping._id,
+                price: newTopping.price,
+            }),
+        )
 
         res.status(201).json({
             id: newTopping._id,
@@ -137,6 +147,14 @@ export class ToppingController {
                 // Don't return error here as the product update was successful
             }
         }
+
+        await this.broker.sendMessage(
+            'topping',
+            JSON.stringify({
+                id: updatedTopping?._id,
+                price: updatedTopping?.price,
+            }),
+        )
 
         res.json({ id: updatedTopping?._id })
     }

@@ -10,15 +10,18 @@ import fileUpload from 'express-fileupload'
 import createHttpError from 'http-errors'
 import createToppingValidator from './create-topping.validator'
 import updateToppingValidator from './update-topping.validator'
+import { createMessageProduceBroker } from '../common/factories/broker.factory'
 
 const router = Router()
 
 const toppingService = new ToppingService()
 const cloudinaryStorage = new CloudinaryStorage()
+const broker = createMessageProduceBroker()
 const toppingController = new ToppingController(
     toppingService,
     cloudinaryStorage,
     logger,
+    broker,
 )
 
 router.post(
