@@ -16,12 +16,14 @@ import mongoose, { isValidObjectId } from 'mongoose'
 import { AuthRequest } from '../common/types'
 import { UploadedFile } from 'express-fileupload'
 import { Logger } from 'winston'
+import { MessageProducerBroker } from '../common/types/broker'
 
 export class ProductController {
     constructor(
         private productService: ProductService,
         private storage: CloudinaryStorage,
         private logger: Logger,
+        private broker: MessageProducerBroker,
     ) {}
 
     create = async (
@@ -66,6 +68,16 @@ export class ProductController {
         }
 
         const newProduct = await this.productService.create(product as Product)
+
+        // send message to kafka
+
+        await this.broker.sendMessage(
+            'product',
+            JSON.stringify({
+                id: newProduct._id,
+                priceConfiguration: newProduct.priceConfiguration,
+            }),
+        )
 
         res.status(201).json({
             id: newProduct._id,
@@ -164,10 +176,16 @@ export class ProductController {
                 }
             }
 
+            await this.broker.sendMessage(
+                'product',
+                JSON.stringify({
+                    id: updatedProduct._id,
+                    priceConfiguration: updatedProduct.priceConfiguration,
+                }),
+            )
+
             res.json({
                 id: productId,
-                product: updatedProduct,
-                message: 'Product updated successfully',
             })
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {

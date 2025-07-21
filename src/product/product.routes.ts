@@ -12,15 +12,18 @@ import { canAccessAdminOrManager } from '../common/middlewares/canAccessAdminOrM
 import updateProductValidator from './update-product.validator'
 import createHttpError from 'http-errors'
 import logger from '../config/logger'
+import { createMessageProduceBroker } from '../common/factories/broker.factory'
 
 const router = Router()
 
 const productService = new ProductService()
 const cloudinaryStorage = new CloudinaryStorage()
+const broker = createMessageProduceBroker()
 const productController = new ProductController(
     productService,
     cloudinaryStorage,
     logger,
+    broker,
 )
 
 router.post(
