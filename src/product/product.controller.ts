@@ -17,6 +17,7 @@ import { AuthRequest } from '../common/types'
 import { UploadedFile } from 'express-fileupload'
 import { Logger } from 'winston'
 import { MessageProducerBroker } from '../common/types/broker'
+import { mapToObject } from '../utils'
 
 export class ProductController {
     constructor(
@@ -75,7 +76,7 @@ export class ProductController {
             'product',
             JSON.stringify({
                 id: newProduct._id,
-                priceConfiguration: newProduct.priceConfiguration,
+                priceConfiguration: mapToObject(newProduct.priceConfiguration),
             }),
         )
 
